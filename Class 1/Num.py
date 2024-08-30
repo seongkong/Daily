@@ -2,6 +2,12 @@ x = int(input())
 y = int(input())
 z = int(input())
 
-sum = x * y * z
+sum = list(str(x * y * z))
 
-print(sum)
+for i in range(0, 10):
+  count = 0
+  for num in sum:
+    if i == int(num):
+      count += 1
+    
+  print(count)
