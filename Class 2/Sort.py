@@ -1,12 +1,12 @@
-import sys
+import sys 
 
 x = int(sys.stdin.readline())
-num = []
+num = [0] * 10001
 
 for i in range(x):
-  num.append(int(sys.stdin.readline()))
+  num[int(sys.stdin.readline())] += 1
 
-sorted_list = sorted(num)
-
-for j in sorted_list:
-  print(j)
+for j in range(10001):
+  if num != 0:
+    for k in range(num[j]):
+      print(j)
