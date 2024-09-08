@@ -1,29 +1,26 @@
-x, y = map(int, input().split())
+N, M = map(int, input().split())
+original = []
+count = []
 
-mtr = []
-cnt = []
+for _ in range(N):
+    original.append(input())
 
-for i in range(x):
-  mtr.append(input())
+for a in range(N-7):
+    for b in range(M-7):
+        index1 = 0
+        index2 = 0
+        for i in range(a, a+8):
+            for j in range(b, b+8):
+                if (i+j) % 2 == 0:
+                    if original[i][j] != 'W':
+                        index1 += 1
+                    if original[i][j] != 'B':
+                        index2 += 1
+                else:
+                    if original[i][j] != 'B':
+                        index1 += 1
+                    if original[i][j] != 'W':
+                        index2 += 1
+        count.append(min(index1, index2))
 
-for j in range(x - 7):
-  for k in range(y - 7):
-    a_index = 0
-    b_index = 0
-    for h in range(j, j+8):
-      for g in range(k, k+8):
-        if (h+g)%2 == 0:
-          if mtr[h][j] != 'W':
-            a_index += 1
-          else:
-            b_index += 1
-        else:
-          if mtr[h][g] != 'W':
-            b_index += 1
-          else:
-            a_index += 1
-
-
-    cnt.append(a_index)
-    cnt.append(b_index)
-print(min(cnt))
+print(min(count))
