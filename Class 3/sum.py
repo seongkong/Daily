@@ -1,13 +1,14 @@
+import sys 
+
+input = sys.stdin.readline
 n, m = map(int, input().split())
+arr = [0]
+arr += list(map(int, input().split()))
 
-num = list(map(int, input().split()))
-sum = [0]
-tmp = 0
-
-for i in num:
-  tmp = tmp + i
-  sum.append(tmp)
+for i, num in enumerate(arr):
+  if i > 0:
+    arr[i] = arr[i - 1] + num
 
 for _ in range(m):
   i, j = map(int, input().split())
-  print(sum[j] - sum[i - 1])
+  print(arr[j] - arr[i - 1])
