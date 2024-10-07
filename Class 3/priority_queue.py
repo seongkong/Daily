@@ -1,60 +1,38 @@
 import sys
 import heapq
-
-def isEmpty(nums):
-    for item in nums:
-        if item[1] > 0:
-            return False
-    return True
-
-t = int(sys.stdin.readline())
-
-for i in range(t):
+def Sol():
+  input = sys.stdin.readline
+  T = int(input())
+  for _ in range(T):
     min_heap = []
     max_heap = []
-    nums = dict()
-    k = int(sys.stdin.readline())
+    k = int(input())
+    check = [1] * k
+    for i in range(k):
+      cal, num = input().split()
+      num = int(num)
+      if cal == "I":
+        heapq.heappush(min_heap,(num,i))
+        heapq.heappush(max_heap,(-num,i))
+      else:
+      ## 원소를 제거함과 동시에 해당하는 숫자의 인덱스를 통해 check의 1을 0으로 삭제되었음을 표시.
+        if num == -1:
+          if min_heap:
+            check[heapq.heappop(min_heap)[1]] = 0
+        elif num == 1:
+          if max_heap:
+            check[heapq.heappop(max_heap)[1]] = 0
+            
+      ## 다음 제거 대상이 될 인덱스에 있는 원소가 이미 다른 쪽에서 지워진 원소면 제거
+      while min_heap and check[min_heap[0][1]] == 0:
+        heapq.heappop(min_heap)
+      while max_heap and check[max_heap[0][1]] == 0:
+        heapq.heappop(max_heap)
     
-    for j in range(k):
-        oprt, oprd = sys.stdin.readline().split()
-        num = int(oprd)
-        
-        if oprt == 'I':
-            # 중복 삽입일 때
-            if num in nums:
-                nums[num] += 1
-            # 처음 삽입일 때
-            else:
-                nums[num] = 1
-                # min_heap에 추가
-                heapq.heappush(min_heap, num)
-                # max_heap에 추가
-                heapq.heappush(max_heap, -num)
-                
-        elif oprt == 'D':
-            # 큐가 비어있지 않을 때만
-            if not isEmpty(nums.items()):
-                # 최댓값을 제거
-                if num == 1:
-                    while -max_heap[0] not in nums or nums[-max_heap[0]] < 1:
-                        temp = -heapq.heappop(max_heap)
-                        if temp in nums:
-                            del(nums[temp])
-                    nums[-max_heap[0]] -= 1
-                # 최솟값을 제거
-                else:
-                    while min_heap[0] not in nums or nums[min_heap[0]] < 1:
-                        temp = heapq.heappop(min_heap)
-                        if temp in nums:
-                            del(nums[temp])
-                    nums[min_heap[0]] -= 1
-                    
-    # 결과 출력           
-    if isEmpty(nums.items()):
-        print('EMPTY')
+    if min_heap == []:
+      print("EMPTY")
     else:
-        while min_heap[0] not in nums or nums[min_heap[0]] < 1:
-            heapq.heappop(min_heap)
-        while -max_heap[0] not in nums or nums[-max_heap[0]] < 1:
-            heapq.heappop(max_heap)
-        print(-max_heap[0], min_heap[0])
+      print(-max_heap[0][0], min_heap[0][0])
+
+if __name__ == "__main__":
+  Sol()
