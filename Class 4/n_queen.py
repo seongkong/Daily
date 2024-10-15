@@ -1,26 +1,28 @@
+import sys
+input = sys.stdin.readline
+
 n = int(input())
+	
+visited = [-1] * n
+cnt = 0
 
-ans = 0
-row = [0] * n
-
-def is_promising(x):
-    for i in range(x):
-        if row[x] == row[i] or abs(row[x] - row[i]) == abs(x - i):
+def check(now_row):
+    for row in range(now_row):
+        if visited[now_row] == visited[row] or now_row - row == abs(visited[now_row] - visited[row]):
             return False
-    
     return True
 
-def n_queens(x):
-    global ans
-    if x == n:
-        ans += 1
-        return
+def dfs(row):
+    global cnt
+    
+    if row == n: 
+        cnt += 1
 
     else:
-        for i in range(n):
-            row[x] = i
-            if is_promising(x):
-                n_queens(x+1)
-
-n_queens(0)
-print(ans)
+        for col in range(n):
+            visited[row] = col
+            if check(row): 
+                dfs(row + 1) 
+                
+dfs(0)
+print(cnt)
