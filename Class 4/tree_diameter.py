@@ -1,41 +1,36 @@
 import sys
-from collections import deque
-
+sys.setrecursionlimit(10**6)
 input = sys.stdin.readline
 
-v = int(input())
-tree = [[] for _ in range(v + 1)]
+n = int(input()) # 정점의 개수
 
-for _ in range(v):
-  line = list(map(int, input().split()))
-  cnt_node = line[0]
-  idx = 1
-  while line[idx] != -1:
-    adj_node, adj_cost = line[idx], line[idx + 1]
-    tree[cnt_node].append((adj_node, adj_cost))
-    idx += 2
+# 그래프 정보
+graph = [[] for _ in range(n+1)]
+for _ in range(n):
+    tree = list(map(int, input().split()))
+    for i in range(1, len(tree)//2):
+        graph[tree[0]].append((tree[2*i-1], tree[2*i]))
 
-visited = [-1] * (v + 1)
-visited[1] = 0
+# 방문 배열
+visited = [-1] * (n+1)
+visited[1] = 0  # 루트 노드 거리는 0으로 초기화
 
-def DFS(node, dist):
-  for v, d in tree[node]:
-    cal_dist = dist + d
-    if visited[v] == -1:
-      visited[v] = cal_dist
-      DFS(v, cal_dist)
-  return
+# DFS 함수
+def DFS(x, distance):
+    for i, w in graph[x]:
+        # 아직 방문하지 않은 노드이면 현재까지의 거리 + 해당 노드까지의 가중치로 방문 배열 값을 변경
+        if visited[i] == -1:
+            visited[i] = distance + w
+            DFS(i, distance + w)
+            
+DFS(1, 0) # 루트 노드(1)에서의 각 정점까지의 거리 계산
+max_distance = max(visited) # 최장 거리
+max_node = visited.index(max_distance) # 해당 노드
 
-DFS(1, 0)
-tmp = [0, 0]
 
-for i in range(1, len(visited)):
-  if visited[i] > tmp[1]:
-    tmp[1] = visited[i]
-    tmp[0] = i
-
-visited = [-1] * (v + 1)
-visited[tmp[0]] = 0
-DFS(tmp[0], 0)
+# max_node에서 시작해 각 정점까지의 거리 계산
+visited = [-1] * (n+1)
+visited[max_node] = 0 
+DFS(max_node, 0)
 
 print(max(visited))
